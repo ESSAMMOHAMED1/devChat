@@ -5,9 +5,11 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, storage, db } from "../firebase";
 import Add from "../assets/imgs/addAvatar.png";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [err, seterr] = useState(false);
+  const navigate = useNavigate();
   const handelSubmit = async (e) => {
     e.preventDefault();
     const displayName = e.target[0].value;
@@ -16,7 +18,6 @@ const Register = () => {
     const file = e.target[3].files[0];
 
     try {
-
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const storageRef = ref(storage, displayName);
 
@@ -24,30 +25,27 @@ const Register = () => {
 
       uploadTask.on(
         (error) => {
-        
           seterr(true);
-        
         },
         () => {
-         
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-           
             await updateProfile(res.user, {
               displayName,
               photoURL: downloadURL,
             });
-            try{
-              
+            try {
               await setDoc(doc(db, "users", res.user.uid), {
                 uid: res.user.uid,
                 displayName,
                 email,
                 photoURL: downloadURL,
               });
-            }catch{
+            } catch {
               console.log(err);
             }
 
+            await setDoc(doc(db, "usersChats", res.user.uid), {});
+            navigate("/");
           });
         }
       );
