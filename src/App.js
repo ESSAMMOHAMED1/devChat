@@ -4,6 +4,7 @@ import {
   BrowserRouter,
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
   Route,
   Routes,
 } from "react-router-dom";
@@ -13,8 +14,8 @@ import Login from "./pages/Login";
 import "../src/style.scss";
 import { AuthContext } from "./context/AuthContext";
 function App() {
-  const {currentUser} = useContext(AuthContext);
-console.log(currentUser)
+  const { currentUser } = useContext(AuthContext) || {};
+  console.log(currentUser)
   return (
     <div className="App">
       <BrowserRouter>
