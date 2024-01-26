@@ -1,4 +1,5 @@
 import React from "react";
+import { useContext } from "react";
 import {
   BrowserRouter,
   createBrowserRouter,
@@ -10,7 +11,10 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import "../src/style.scss";
+import { AuthContext } from "./context/AuthContext";
 function App() {
+  const {currentUser} = useContext(AuthContext);
+console.log(currentUser)
   return (
     <div className="App">
       <BrowserRouter>
